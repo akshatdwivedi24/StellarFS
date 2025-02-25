@@ -1,0 +1,15 @@
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+button {
+    background-color: red;
+}
+
+button:hover {
+    background-color: darkred;
+}
