@@ -7,7 +7,7 @@ public class FileMetadata {
     private long fileSize;
     private LocalDateTime uploadedAt;
 
-    public FileMetadata(String fileName, long fileSize) {
+    public FileMetadata(String fileName) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.uploadedAt = LocalDateTime.now();
