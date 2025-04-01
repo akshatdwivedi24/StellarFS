@@ -25,6 +25,7 @@ import StorageOverview from './components/StorageOverview';
 import FileManagement from './components/FileManagement';
 import NodeMonitoring from './components/NodeMonitoring';
 import UserManagement from './components/UserManagement';
+import SystemOperations from './components/SystemOperations';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Styled Switch component
@@ -225,6 +226,8 @@ function App() {
         return <NodeMonitoring onNavigateBack={() => setCurrentView('dashboard')} />;
       case 'users':
         return <UserManagement onNavigateBack={() => setCurrentView('dashboard')} />;
+      case 'system-operations':
+        return <SystemOperations onNavigateBack={() => setCurrentView('dashboard')} />;
       case 'dashboard':
       default:
         return <Dashboard user={user} onNavigate={handleNavigate} />;
@@ -331,6 +334,7 @@ function App() {
           <Route path="/files" element={<FileManagement />} />
           <Route path="/nodes" element={<NodeMonitoring />} />
           <Route path="/users" element={<UserManagement />} />
+          <Route path="/system" element={<SystemOperations />} />
         </Routes>
       </Router>
     </ThemeProvider>

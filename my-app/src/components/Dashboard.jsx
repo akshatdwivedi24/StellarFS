@@ -91,10 +91,10 @@ const features = [
     description: 'System administration and optimization tools',
     icon: <SettingsIcon />,
     details: [
-      'Replication Status - Show how data is copied across nodes',
-      'Backup & Recovery Tools - Options to create and restore backups',
-      'Auto-Scaling Settings - Configure dynamic node addition/removal',
-      'Data Deduplication & Compression - Display efficiency reports'
+      'System Metrics - Monitor system performance and health',
+      'Backup & Recovery - Create and manage system backups',
+      'Maintenance Tasks - Optimize storage and perform maintenance',
+      'System Configuration - Configure system settings and auto-scaling'
     ],
     view: 'system-operations'
   },
