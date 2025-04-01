@@ -12,12 +12,15 @@ import {
   Button,
   Avatar,
   Typography,
-  Container
+  Container,
+  Alert
 } from '@mui/material';
 import { 
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
   Google as GoogleIcon,
+  Info as InfoIcon,
+  Storage as StorageIcon,
 } from '@mui/icons-material';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
@@ -27,6 +30,7 @@ import NodeMonitoring from './components/NodeMonitoring';
 import UserManagement from './components/UserManagement';
 import SystemOperations from './components/SystemOperations';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AboutUsDialog from './components/AboutUsDialog';
 
 // Styled Switch component
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -81,6 +85,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [aboutUsOpen, setAboutUsOpen] = useState(false);
 
   useEffect(() => {
     // Test backend connection
@@ -319,106 +324,96 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/" element={
-            <Box sx={{ flexGrow: 1 }}>
-              <AppBar 
-                position="static" 
-                color="default" 
-                elevation={0}
-                sx={{
-                  backgroundColor: 'transparent',
-                  mb: 0
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar 
+          position="static" 
+          elevation={0}
+          sx={{
+            bgcolor: mode === 'light' ? 'primary.main' : 'background.paper',
+          }}
+        >
+          <Toolbar>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1 }}>
+              <StorageIcon sx={{ color: 'white' }} />
+              <Typography variant="h6" component="div" sx={{ color: 'white' }}>
+                StellarFS
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<InfoIcon />}
+                onClick={() => setAboutUsOpen(true)}
+                sx={{ 
+                  ml: 2,
+                  color: 'white',
+                  borderColor: 'white',
+                  '&:hover': {
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
                 }}
               >
-                <Toolbar sx={{ 
-                  minHeight: '48px',
-                  height: '48px',
-                  display: 'flex', 
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  padding: '0 24px',
-                  marginBottom: '8px',
-                  marginTop: '8px'
-                }}>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 2,
-                  }}>
-                    <FormControlLabel
-                      control={
-                        <MaterialUISwitch
-                          checked={mode === 'dark'}
-                          onChange={() => setMode(mode === 'light' ? 'dark' : 'light')}
-                        />
-                      }
-                      label=""
-                      sx={{ margin: 0 }}
-                    />
-                    {user && (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleLogout}
-                        startIcon={
-                          <Avatar
-                            src={user.picture}
-                            sx={{ width: 28, height: 28 }}
-                          />
-                        }
-                        sx={{ 
-                          height: '40px',
-                          fontSize: '1rem',
-                          padding: '8px 16px'
-                        }}
-                      >
-                        Logout
-                      </Button>
-                    )}
-                    {!user && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleLogin}
-                        startIcon={<GoogleIcon />}
-                        sx={{ height: '32px' }}
-                      >
-                        Sign in with Google
-                      </Button>
-                    )}
-                  </Box>
-                </Toolbar>
-              </AppBar>
-              <Box sx={{ p: 3, pt: 1 }}>
-                {error && (
-                  <Box sx={{ 
-                    p: 2, 
-                    mb: 2, 
-                    bgcolor: 'error.main', 
-                    color: 'error.contrastText',
-                    borderRadius: 1,
-                    textAlign: 'center'
-                  }}>
-                    {error}
-                  </Box>
-                )}
-                {user ? (
-                  renderView()
-                ) : (
-                  <Home onLogin={handleLogin} />
-                )}
-              </Box>
+                About Us
+              </Button>
             </Box>
-          } />
-          <Route path="/storage" element={<StorageOverview />} />
-          <Route path="/files" element={<FileManagement />} />
-          <Route path="/nodes" element={<NodeMonitoring />} />
-          <Route path="/users" element={<UserManagement />} />
-          <Route path="/system" element={<SystemOperations />} />
-        </Routes>
-      </Router>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <FormControlLabel
+                control={
+                  <MaterialUISwitch 
+                    checked={mode === 'dark'}
+                    onChange={() => setMode(mode === 'light' ? 'dark' : 'light')}
+                  />
+                }
+                label=""
+              />
+              {user ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Avatar src={user.picture} alt={user.name} />
+                  <Button 
+                    variant="outlined"
+                    onClick={handleLogout}
+                    sx={{ 
+                      color: 'white',
+                      borderColor: 'white',
+                      '&:hover': {
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      },
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </Box>
+              ) : (
+                <Button
+                  variant="outlined"
+                  startIcon={<GoogleIcon />}
+                  onClick={handleLogin}
+                  sx={{ 
+                    color: 'white',
+                    borderColor: 'white',
+                    '&:hover': {
+                      borderColor: 'rgba(255, 255, 255, 0.8)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    },
+                  }}
+                >
+                  Sign in with Google
+                </Button>
+              )}
+            </Box>
+          </Toolbar>
+        </AppBar>
+
+        {error && (
+          <Box sx={{ p: 2 }}>
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        )}
+
+        {user ? renderView() : <Home />}
+      </Box>
+
+      <AboutUsDialog open={aboutUsOpen} onClose={() => setAboutUsOpen(false)} />
     </ThemeProvider>
   );
 }
