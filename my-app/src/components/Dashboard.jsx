@@ -35,6 +35,7 @@ import {
   Security as SecurityOverviewIcon,
   Build as BuildIcon,
   Warning as WarningIcon,
+  CheckCircleOutline as CheckCircleOutlineIcon,
 } from '@mui/icons-material';
 
 const features = [
@@ -229,12 +230,14 @@ const Dashboard = ({ user, onNavigate }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'transform 0.2s, box-shadow 0.2s',
+                position: 'relative',
+                overflow: 'visible',
                 '&:hover': {
                   transform: 'translateY(-4px)',
-                  boxShadow: theme.shadows[4],
+                  boxShadow: theme.shadows[8],
                   cursor: 'pointer',
                   '& .feature-icon': {
-                    transform: 'scale(1.1)',
+                    transform: 'scale(1.1) translateY(-2px)',
                   },
                 },
               }}
@@ -245,18 +248,19 @@ const Dashboard = ({ user, onNavigate }) => {
                   <Box
                     className="feature-icon"
                     sx={{
-                      bgcolor: 'primary.light',
-                      borderRadius: '50%',
-                      p: 1.5,
+                      bgcolor: 'primary.main',
+                      borderRadius: '12px',
+                      p: 2,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'transform 0.2s',
+                      transition: 'transform 0.3s ease',
+                      boxShadow: theme.shadows[4],
                     }}
                   >
                     {React.cloneElement(feature.icon, {
                       sx: { 
-                        color: 'primary.main',
+                        color: 'white',
                         fontSize: '2rem',
                       }
                     })}
@@ -268,45 +272,74 @@ const Dashboard = ({ user, onNavigate }) => {
                     component="h3"
                     sx={{ 
                       color: 'primary.main',
-                      fontWeight: 600,
-                      fontSize: '1.2rem',
+                      fontWeight: 700,
+                      fontSize: '1.3rem',
+                      mb: 0.5,
                     }}
                   >
                     {feature.title}
                   </Typography>
                 }
+                sx={{
+                  pb: 0,
+                  '& .MuiCardHeader-avatar': {
+                    marginRight: 2.5,
+                  },
+                }}
               />
-              <CardContent sx={{ flexGrow: 1, pt: 0 }}>
-                <Typography 
-                  variant="body1" 
-                  color="text.secondary"
-                  sx={{
-                    fontSize: '1rem',
-                    lineHeight: 1.6,
-                    mb: 2,
-                  }}
-                >
-                  {feature.description}
-                </Typography>
-                <Divider sx={{ my: 1 }} />
-                <List dense>
-                  {feature.details.map((detail, idx) => (
-                    <ListItem key={idx}>
-                      <ListItemIcon>
-                        <AssessmentIcon sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
-                      </ListItemIcon>
-                      <ListItemText 
-                        primary={detail}
-                        sx={{
-                          '& .MuiListItemText-primary': {
-                            fontSize: '0.9rem',
-                            lineHeight: 1.4,
-                          }
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+              <CardContent sx={{ pt: 2, pb: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                <Box sx={{ mb: 4 }}>
+                  <Typography 
+                    variant="subtitle1" 
+                    color="text.secondary"
+                    sx={{
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {feature.description}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography 
+                    variant="caption" 
+                    color="primary.main"
+                    sx={{ 
+                      fontWeight: 600,
+                      display: 'block',
+                      mb: 1.5,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    Key Features
+                  </Typography>
+                  <List 
+                    dense 
+                    sx={{ 
+                      '& .MuiListItem-root': { 
+                        px: 0, 
+                        py: 0.5,
+                      } 
+                    }}
+                  >
+                    {feature.details.map((detail, idx) => (
+                      <ListItem key={idx}>
+                        <ListItemIcon sx={{ minWidth: 28, color: 'primary.main' }}>
+                          <CheckCircleOutlineIcon sx={{ fontSize: '1rem' }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={detail} 
+                          primaryTypographyProps={{
+                            variant: 'body2',
+                            color: 'text.secondary',
+                            sx: { lineHeight: 1.4 }
+                          }}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
               </CardContent>
             </Card>
           ))}
