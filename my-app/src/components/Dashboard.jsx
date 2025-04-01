@@ -84,7 +84,7 @@ const features = [
       'Audit Logs - Track who accessed or modified files and when',
       'Activity Logs - Log file uploads, deletions, and transfers'
     ],
-    view: 'user-access'
+    view: 'users'
   },
   {
     title: 'System Operations & Maintenance ⚙️',
