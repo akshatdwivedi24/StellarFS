@@ -133,35 +133,71 @@ function App() {
     palette: {
       mode,
       primary: {
-        main: mode === 'light' ? '#3674B5' : '#610094',
-        light: mode === 'light' ? '#578FCA' : '#3F0071',
-        dark: mode === 'light' ? '#3674B5' : '#150050',
+        main: mode === 'light' ? '#00838F' : '#00BCD4',
+        light: mode === 'light' ? '#4FB3BF' : '#4DD0E1',
+        dark: mode === 'light' ? '#005662' : '#006064',
+        contrastText: '#FFFFFF',
       },
       secondary: {
-        main: mode === 'light' ? '#A1E3F9' : '#3F0071',
-        light: mode === 'light' ? '#D1F8EF' : '#610094',
-        dark: mode === 'light' ? '#578FCA' : '#150050',
+        main: mode === 'light' ? '#1A237E' : '#FF6E40',
+        light: mode === 'light' ? '#534BAE' : '#FF9E80',
+        dark: mode === 'light' ? '#000051' : '#FF3D00',
+        contrastText: '#FFFFFF',
       },
       background: {
-        default: mode === 'light' ? '#D1F8EF' : '#000000',
-        paper: mode === 'light' ? '#FFFFFF' : '#150050',
+        default: mode === 'light' ? '#F8FAFB' : '#0A1929',
+        paper: mode === 'light' ? '#FFFFFF' : '#132F4C',
       },
       text: {
-        primary: mode === 'light' ? '#3674B5' : '#FFFFFF',
-        secondary: mode === 'light' ? '#578FCA' : '#FFFFFF',
+        primary: mode === 'light' ? '#0A1929' : '#F8FAFB',
+        secondary: mode === 'light' ? '#465A69' : '#B2BAC2',
       },
+      error: {
+        main: mode === 'light' ? '#D32F2F' : '#FF5252',
+        light: mode === 'light' ? '#EF5350' : '#FF867F',
+        dark: mode === 'light' ? '#C62828' : '#D50000',
+      },
+      warning: {
+        main: mode === 'light' ? '#ED6C02' : '#FFB74D',
+        light: mode === 'light' ? '#FF9800' : '#FFD54F',
+        dark: mode === 'light' ? '#E65100' : '#F57C00',
+      },
+      success: {
+        main: mode === 'light' ? '#2E7D32' : '#69F0AE',
+        light: mode === 'light' ? '#4CAF50' : '#B9F6CA',
+        dark: mode === 'light' ? '#1B5E20' : '#00C853',
+      },
+      divider: mode === 'light' ? 'rgba(10, 25, 41, 0.12)' : 'rgba(248, 250, 251, 0.12)',
     },
     typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      h1: {
+        fontWeight: 600,
+        letterSpacing: '-0.5px',
+      },
       h2: {
-        fontWeight: 700,
+        fontWeight: 600,
+        letterSpacing: '-0.5px',
       },
       h3: {
         fontWeight: 600,
+        letterSpacing: '-0.5px',
+      },
+      h4: {
+        fontWeight: 600,
+        letterSpacing: '-0.5px',
       },
       h5: {
-        fontWeight: 500,
+        fontWeight: 600,
+        letterSpacing: '-0.5px',
       },
+      h6: {
+        fontWeight: 600,
+        letterSpacing: '-0.5px',
+      },
+    },
+    shape: {
+      borderRadius: 12,
     },
     components: {
       MuiButton: {
@@ -169,31 +205,57 @@ function App() {
           root: {
             textTransform: 'none',
             borderRadius: 8,
+            fontWeight: 500,
+            padding: '8px 16px',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: mode === 'light' 
+                ? '0 4px 8px rgba(0, 131, 143, 0.15)'
+                : '0 4px 8px rgba(0, 188, 212, 0.25)',
+            },
+          },
+          contained: {
+            boxShadow: mode === 'light'
+              ? '0 2px 4px rgba(0, 131, 143, 0.1)'
+              : '0 2px 4px rgba(0, 188, 212, 0.2)',
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: 12,
-            boxShadow: mode === 'light' 
-              ? '0 4px 6px rgba(54, 116, 181, 0.2)'
-              : '0 4px 6px rgba(21, 0, 80, 0.5)',
+            borderRadius: 16,
+            boxShadow: mode === 'light'
+              ? '0 4px 12px rgba(0, 131, 143, 0.1)'
+              : '0 4px 12px rgba(0, 0, 0, 0.3)',
+            border: mode === 'light'
+              ? '1px solid rgba(0, 131, 143, 0.05)'
+              : '1px solid rgba(248, 250, 251, 0.05)',
+            backdropFilter: 'blur(8px)',
+            background: mode === 'light'
+              ? 'rgba(255, 255, 255, 0.9)'
+              : 'rgba(19, 47, 76, 0.9)',
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: 'none',
+            boxShadow: mode === 'light'
+              ? '0 2px 8px rgba(0, 131, 143, 0.08)'
+              : '0 2px 8px rgba(0, 0, 0, 0.25)',
           },
         },
       },
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: 'transparent',
+            backgroundColor: mode === 'light'
+              ? 'rgba(255, 255, 255, 0.8)'
+              : 'rgba(19, 47, 76, 0.8)',
+            backdropFilter: 'blur(8px)',
             boxShadow: 'none',
-          },
-        },
-      },
-      MuiToolbar: {
-        styleOverrides: {
-          root: {
-            height: '100%',
           },
         },
       },
@@ -201,11 +263,31 @@ function App() {
         styleOverrides: {
           root: {
             '& .MuiSwitch-thumb': {
-              backgroundColor: mode === 'light' ? '#3674B5' : '#610094',
+              backgroundColor: mode === 'light' ? '#00838F' : '#00BCD4',
             },
             '& .MuiSwitch-track': {
-              backgroundColor: mode === 'light' ? '#A1E3F9' : '#150050',
+              backgroundColor: mode === 'light' ? '#4FB3BF' : '#006064',
+              opacity: 0.4,
             },
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            borderBottom: mode === 'light'
+              ? '1px solid rgba(0, 131, 143, 0.1)'
+              : '1px solid rgba(248, 250, 251, 0.05)',
+          },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            borderRadius: 16,
+            boxShadow: mode === 'light'
+              ? '0 8px 24px rgba(0, 131, 143, 0.15)'
+              : '0 8px 24px rgba(0, 0, 0, 0.4)',
           },
         },
       },
