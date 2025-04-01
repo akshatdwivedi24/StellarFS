@@ -47,7 +47,8 @@ const features = [
       'Storage Usage Per Node - Show how much data each node is storing',
       'Data Replication Status - Indicate how many copies exist for each file',
       'File Distribution Map - Visual representation of file locations across nodes'
-    ]
+    ],
+    view: 'storage-overview'
   },
   {
     title: 'File Management Panel 📂',
@@ -58,7 +59,8 @@ const features = [
       'View File Metadata - Show file size, creation date, last modified date, and access permissions',
       'Search & Filter Files - Enable searching based on filename, type, owner, or date',
       'File Versioning - Show previous versions of files for rollback'
-    ]
+    ],
+    view: 'file-management'
   },
   {
     title: 'Node Health & Performance Monitoring 🖥️',
@@ -69,7 +71,8 @@ const features = [
       'CPU & Memory Usage - Monitor real-time resource consumption of each node',
       'Network Latency - Measure file access speeds between nodes',
       'Fault Detection Alerts - Notify when a node fails or storage runs low'
-    ]
+    ],
+    view: 'node-health'
   },
   {
     title: 'User & Access Control 🔑',
@@ -80,7 +83,8 @@ const features = [
       'Role-Based Access Control - Assign different permissions to users',
       'Audit Logs - Track who accessed or modified files and when',
       'Activity Logs - Log file uploads, deletions, and transfers'
-    ]
+    ],
+    view: 'user-access'
   },
   {
     title: 'System Operations & Maintenance ⚙️',
@@ -91,7 +95,8 @@ const features = [
       'Backup & Recovery Tools - Options to create and restore backups',
       'Auto-Scaling Settings - Configure dynamic node addition/removal',
       'Data Deduplication & Compression - Display efficiency reports'
-    ]
+    ],
+    view: 'system-operations'
   },
   {
     title: 'Real-Time Alerts & Notifications 🚨',
@@ -101,12 +106,19 @@ const features = [
       'Storage Full Alerts - Notify admins when storage reaches a threshold',
       'File Access Notifications - Alert users about critical file changes',
       'Security Warnings - Detect and report unauthorized access attempts'
-    ]
+    ],
+    view: 'real-time-alerts'
   }
 ];
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, onNavigate }) => {
   const theme = useTheme();
+
+  const handleFeatureClick = (view) => {
+    if (onNavigate && view) {
+      onNavigate(view);
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -226,6 +238,7 @@ const Dashboard = ({ user }) => {
                   },
                 },
               }}
+              onClick={() => handleFeatureClick(feature.view)}
             >
               <CardHeader
                 avatar={

@@ -11,7 +11,8 @@ import {
   FormControlLabel,
   Button,
   Avatar,
-  Typography
+  Typography,
+  Container
 } from '@mui/material';
 import { 
   DarkMode as DarkModeIcon,
@@ -20,6 +21,7 @@ import {
 } from '@mui/icons-material';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
+import StorageOverview from './components/StorageOverview';
 
 // Styled Switch component
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -73,6 +75,7 @@ function App() {
   const [mode, setMode] = useState('light');
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [currentView, setCurrentView] = useState('dashboard');
 
   useEffect(() => {
     // Test backend connection
@@ -204,6 +207,20 @@ function App() {
     },
   }), [mode]);
 
+  const handleNavigate = (view) => {
+    setCurrentView(view);
+  };
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'storage-overview':
+        return <StorageOverview />;
+      case 'dashboard':
+      default:
+        return <Dashboard user={user} onNavigate={handleNavigate} />;
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -290,7 +307,7 @@ function App() {
             </Box>
           )}
           {user ? (
-            <Dashboard user={user} />
+            renderView()
           ) : (
             <Home onLogin={handleLogin} />
           )}
