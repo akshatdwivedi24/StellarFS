@@ -170,18 +170,31 @@ const Dashboard = ({ user }) => {
           alignItems: 'center',
         }}
       >
-        <Typography 
-          variant="h5" 
-          component="h2" 
-          sx={{ 
-            mb: 4, 
-            fontWeight: 600,
-            color: 'primary.main',
-            textAlign: 'center',
+        <Paper
+          elevation={0}
+          sx={{
+            bgcolor: 'primary.main',
+            color: 'white',
+            py: 4,
+            mb: 4,
+            width: '100%',
+            borderRadius: 2,
+            boxShadow: theme.shadows[3],
           }}
         >
-          System Dashboard
-        </Typography>
+          <Container maxWidth="lg">
+            <Typography 
+              variant="h4" 
+              component="h2" 
+              sx={{ 
+                fontWeight: 600,
+                textAlign: 'center',
+              }}
+            >
+              System Dashboard
+            </Typography>
+          </Container>
+        </Paper>
         <Box
           sx={{
             display: 'grid',
