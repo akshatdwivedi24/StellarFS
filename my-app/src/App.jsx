@@ -19,6 +19,7 @@ import {
   Google as GoogleIcon,
 } from '@mui/icons-material';
 import Home from './components/Home';
+import Dashboard from './components/Dashboard';
 
 // Styled Switch component
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -263,7 +264,11 @@ function App() {
               {error}
             </Box>
           )}
-          <Home user={user} />
+          {user ? (
+            <Dashboard user={user} />
+          ) : (
+            <Home onLogin={handleLogin} />
+          )}
         </Box>
       </Box>
     </ThemeProvider>
