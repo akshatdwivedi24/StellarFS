@@ -22,6 +22,7 @@ import {
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import StorageOverview from './components/StorageOverview';
+import FileManagement from './components/FileManagement';
 
 // Styled Switch component
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -215,6 +216,8 @@ function App() {
     switch (currentView) {
       case 'storage-overview':
         return <StorageOverview />;
+      case 'file-management':
+        return <FileManagement />;
       case 'dashboard':
       default:
         return <Dashboard user={user} onNavigate={handleNavigate} />;
