@@ -16,6 +16,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  IconButton,
 } from '@mui/material';
 import {
   Storage as StorageIcon,
@@ -25,11 +26,12 @@ import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
   Error as ErrorIcon,
+  ArrowBack as ArrowBackIcon
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
-const StorageOverview = () => {
+const StorageOverview = ({ onNavigateBack }) => {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -117,6 +119,7 @@ const StorageOverview = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      {/* Header */}
       <Paper
         elevation={0}
         sx={{
@@ -127,12 +130,23 @@ const StorageOverview = () => {
           borderRadius: 2,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Storage Overview
-        </Typography>
-        <Typography variant="subtitle1">
-          Comprehensive analytics and monitoring for your distributed storage system
-        </Typography>
+        <Box display="flex" alignItems="center">
+          <IconButton 
+            onClick={onNavigateBack} 
+            sx={{ mr: 2, color: 'white' }} 
+            aria-label="back"
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Storage Overview
+            </Typography>
+            <Typography variant="subtitle1">
+              Comprehensive analytics and monitoring for your distributed storage system
+            </Typography>
+          </Box>
+        </Box>
       </Paper>
 
       <Grid container spacing={3}>

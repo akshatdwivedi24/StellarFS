@@ -72,7 +72,7 @@ const features = [
       'Network Latency - Measure file access speeds between nodes',
       'Fault Detection Alerts - Notify when a node fails or storage runs low'
     ],
-    view: 'node-health'
+    view: 'nodes'
   },
   {
     title: 'User & Access Control 🔑',

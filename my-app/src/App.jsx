@@ -23,6 +23,8 @@ import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import StorageOverview from './components/StorageOverview';
 import FileManagement from './components/FileManagement';
+import NodeMonitoring from './components/NodeMonitoring';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Styled Switch component
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -215,9 +217,11 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'storage-overview':
-        return <StorageOverview />;
+        return <StorageOverview onNavigateBack={() => setCurrentView('dashboard')} />;
       case 'file-management':
-        return <FileManagement />;
+        return <FileManagement onNavigateBack={() => setCurrentView('dashboard')} />;
+      case 'nodes':
+        return <NodeMonitoring onNavigateBack={() => setCurrentView('dashboard')} />;
       case 'dashboard':
       default:
         return <Dashboard user={user} onNavigate={handleNavigate} />;
@@ -227,95 +231,104 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar 
-          position="static" 
-          color="default" 
-          elevation={0}
-          sx={{
-            backgroundColor: 'transparent',
-            mb: 0
-          }}
-        >
-          <Toolbar sx={{ 
-            minHeight: '48px',
-            height: '48px',
-            display: 'flex', 
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            padding: '0 24px',
-            marginBottom: '8px',
-            marginTop: '8px'
-          }}>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 2,
-            }}>
-              <FormControlLabel
-                control={
-                  <MaterialUISwitch
-                    checked={mode === 'dark'}
-                    onChange={() => setMode(mode === 'light' ? 'dark' : 'light')}
-                  />
-                }
-                label=""
-                sx={{ margin: 0 }}
-              />
-              {user && (
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleLogout}
-                  startIcon={
-                    <Avatar
-                      src={user.picture}
-                      sx={{ width: 28, height: 28 }}
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <Box sx={{ flexGrow: 1 }}>
+              <AppBar 
+                position="static" 
+                color="default" 
+                elevation={0}
+                sx={{
+                  backgroundColor: 'transparent',
+                  mb: 0
+                }}
+              >
+                <Toolbar sx={{ 
+                  minHeight: '48px',
+                  height: '48px',
+                  display: 'flex', 
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  padding: '0 24px',
+                  marginBottom: '8px',
+                  marginTop: '8px'
+                }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 2,
+                  }}>
+                    <FormControlLabel
+                      control={
+                        <MaterialUISwitch
+                          checked={mode === 'dark'}
+                          onChange={() => setMode(mode === 'light' ? 'dark' : 'light')}
+                        />
+                      }
+                      label=""
+                      sx={{ margin: 0 }}
                     />
-                  }
-                  sx={{ 
-                    height: '40px',
-                    fontSize: '1rem',
-                    padding: '8px 16px'
-                  }}
-                >
-                  Logout
-                </Button>
-              )}
-              {!user && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleLogin}
-                  startIcon={<GoogleIcon />}
-                  sx={{ height: '32px' }}
-                >
-                  Sign in with Google
-                </Button>
-              )}
+                    {user && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleLogout}
+                        startIcon={
+                          <Avatar
+                            src={user.picture}
+                            sx={{ width: 28, height: 28 }}
+                          />
+                        }
+                        sx={{ 
+                          height: '40px',
+                          fontSize: '1rem',
+                          padding: '8px 16px'
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    )}
+                    {!user && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleLogin}
+                        startIcon={<GoogleIcon />}
+                        sx={{ height: '32px' }}
+                      >
+                        Sign in with Google
+                      </Button>
+                    )}
+                  </Box>
+                </Toolbar>
+              </AppBar>
+              <Box sx={{ p: 3, pt: 1 }}>
+                {error && (
+                  <Box sx={{ 
+                    p: 2, 
+                    mb: 2, 
+                    bgcolor: 'error.main', 
+                    color: 'error.contrastText',
+                    borderRadius: 1,
+                    textAlign: 'center'
+                  }}>
+                    {error}
+                  </Box>
+                )}
+                {user ? (
+                  renderView()
+                ) : (
+                  <Home onLogin={handleLogin} />
+                )}
+              </Box>
             </Box>
-          </Toolbar>
-        </AppBar>
-        <Box sx={{ p: 3, pt: 1 }}>
-          {error && (
-            <Box sx={{ 
-              p: 2, 
-              mb: 2, 
-              bgcolor: 'error.main', 
-              color: 'error.contrastText',
-              borderRadius: 1,
-              textAlign: 'center'
-            }}>
-              {error}
-            </Box>
-          )}
-          {user ? (
-            renderView()
-          ) : (
-            <Home onLogin={handleLogin} />
-          )}
-        </Box>
-      </Box>
+          } />
+          <Route path="/storage" element={<StorageOverview />} />
+          <Route path="/files" element={<FileManagement />} />
+          <Route path="/nodes" element={<NodeMonitoring />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

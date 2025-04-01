@@ -51,10 +51,11 @@ import {
   Movie as VideoIcon,
   MusicNote as AudioIcon,
   Archive as ZipIcon,
+  ArrowBack as ArrowBackIcon
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
-const FileManagement = () => {
+const FileManagement = ({ onNavigateBack }) => {
   const theme = useTheme();
   const fileInputRef = useRef(null);
   
@@ -427,12 +428,23 @@ const FileManagement = () => {
           borderRadius: 2,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          File Management
-        </Typography>
-        <Typography variant="subtitle1">
-          Upload, download, and manage your files across the distributed system
-        </Typography>
+        <Box display="flex" alignItems="center">
+          <IconButton 
+            onClick={onNavigateBack} 
+            sx={{ mr: 2, color: 'white' }} 
+            aria-label="back"
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+              File Management
+            </Typography>
+            <Typography variant="subtitle1">
+              Upload, download, and manage your files across the distributed system
+            </Typography>
+          </Box>
+        </Box>
       </Paper>
 
       {/* Actions Bar */}
