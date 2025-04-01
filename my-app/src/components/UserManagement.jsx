@@ -25,19 +25,19 @@ import {
   Tab,
   Tabs,
   Alert,
-  Snackbar
+  Snackbar,
+  Container
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Block as BlockIcon,
   CheckCircle as CheckCircleIcon,
-  ArrowBack as ArrowBackIcon
+  ArrowBack as ArrowBackIcon,
+  Refresh as RefreshIcon
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 
-function UserManagement() {
-  const navigate = useNavigate();
+function UserManagement({ onNavigateBack }) {
   const [users, setUsers] = useState([]);
   const [activityLogs, setActivityLogs] = useState([]);
   const [availableRoles, setAvailableRoles] = useState([]);
@@ -152,13 +152,53 @@ function UserManagement() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
-        <IconButton onClick={() => navigate('/dashboard')}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4">User Management</Typography>
-      </Stack>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      {/* Header */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 4,
+          bgcolor: 'primary.main',
+          color: 'white',
+          borderRadius: 2,
+        }}
+      >
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <IconButton 
+              onClick={onNavigateBack} 
+              sx={{ mr: 2, color: 'white' }} 
+              aria-label="back"
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <Box>
+              <Typography variant="h4" component="h1" gutterBottom>
+                User Management & Access Control
+              </Typography>
+              <Typography variant="subtitle1">
+                Manage users, roles, permissions, and monitor user activity across the system
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            onClick={fetchUsers}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': {
+                borderColor: 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+          >
+            Refresh
+          </Button>
+        </Box>
+      </Paper>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={selectedTab} onChange={(e, newValue) => setSelectedTab(newValue)}>
@@ -319,7 +359,7 @@ function UserManagement() {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Box>
+    </Container>
   );
 }
 

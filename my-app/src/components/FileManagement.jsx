@@ -447,48 +447,96 @@ const FileManagement = ({ onNavigateBack }) => {
         </Box>
       </Paper>
 
-      {/* Actions Bar */}
-      <Paper sx={{ mb: 3, p: 2, borderRadius: 2 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={6} md={4}>
+      {/* File Management Controls */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Grid 
+          container 
+          spacing={2} 
+          sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            margin: 0,
+          }}
+        >
+          {/* Search */}
+          <Grid item xs={3} sx={{ pl: '8px !important' }}>
             <TextField
               fullWidth
               variant="outlined"
               placeholder="Search files..."
-              value={searchTerm}
-              onChange={handleSearch}
-              size="small"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon color="primary" />
+                    <SearchIcon />
                   </InputAdornment>
                 ),
               }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{ 
+                '& .MuiOutlinedInput-root': {
+                  height: '56px'
+                }
+              }}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={8} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
+
+          {/* Upload Button */}
+          <Grid item xs={3} sx={{ pl: '16px !important' }}>
             <Button
+              fullWidth
               variant="contained"
-              color="primary"
               startIcon={<UploadIcon />}
-              onClick={handleUploadClick}
-              sx={{ mr: 1 }}
+              onClick={() => setOpenUploadDialog(true)}
+              sx={{
+                height: '56px',
+                backgroundColor: 'primary.main',
+              }}
             >
-              Upload
+              Upload Files
             </Button>
+          </Grid>
+
+          {/* New Folder Button */}
+          <Grid item xs={3} sx={{ pl: '16px !important' }}>
             <Button
+              fullWidth
               variant="outlined"
               startIcon={<FolderIcon />}
-              sx={{ mr: 1 }}
+              onClick={() => {/* Handle new folder */}}
+              sx={{
+                height: '56px',
+                borderColor: 'primary.main',
+                color: 'primary.main',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                  backgroundColor: 'primary.lighter',
+                },
+              }}
             >
               New Folder
             </Button>
+          </Grid>
+
+          {/* Sort Button */}
+          <Grid item xs={3} sx={{ pl: '16px !important' }}>
             <Button
+              fullWidth
               variant="outlined"
               startIcon={<SortIcon />}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+              sx={{
+                height: '56px',
+                borderColor: 'primary.main',
+                color: 'primary.main',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                  backgroundColor: 'primary.lighter',
+                },
+              }}
             >
-              Sort
+              Sort By
             </Button>
           </Grid>
         </Grid>

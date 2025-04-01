@@ -28,7 +28,8 @@ import {
   DialogActions,
   LinearProgress,
   Tooltip,
-  Divider
+  Divider,
+  Container
 } from '@mui/material';
 import {
   Refresh as RefreshIcon,
@@ -156,35 +157,109 @@ const NodeMonitoring = ({ onNavigateBack }) => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-        <CircularProgress />
-      </Box>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {/* Header */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            bgcolor: 'primary.main',
+            color: 'white',
+            borderRadius: 2,
+          }}
+        >
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box display="flex" alignItems="center">
+              <IconButton 
+                onClick={onNavigateBack} 
+                sx={{ mr: 2, color: 'white' }} 
+                aria-label="back"
+              >
+                <ArrowBackIcon />
+              </IconButton>
+              <Box>
+                <Typography variant="h4" component="h1" gutterBottom>
+                  Node Monitoring & Performance
+                </Typography>
+                <Typography variant="subtitle1">
+                  Monitor and manage system nodes, track performance metrics, and ensure optimal operation
+                </Typography>
+              </Box>
+            </Box>
+            <Button
+              variant="outlined"
+              startIcon={<RefreshIcon />}
+              onClick={fetchNodes}
+              sx={{
+                color: 'white',
+                borderColor: 'white',
+                '&:hover': {
+                  borderColor: 'rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                },
+              }}
+            >
+              Refresh
+            </Button>
+          </Box>
+        </Paper>
+
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+          <CircularProgress />
+        </Box>
+      </Container>
     );
   }
 
   return (
-    <DashboardContainer>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Box display="flex" alignItems="center">
-          <IconButton 
-            onClick={onNavigateBack} 
-            sx={{ mr: 2 }} 
-            aria-label="back"
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      {/* Header */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 4,
+          bgcolor: 'primary.main',
+          color: 'white',
+          borderRadius: 2,
+        }}
+      >
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <IconButton 
+              onClick={onNavigateBack} 
+              sx={{ mr: 2, color: 'white' }} 
+              aria-label="back"
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <Box>
+              <Typography variant="h4" component="h1" gutterBottom>
+                Node Monitoring & Performance
+              </Typography>
+              <Typography variant="subtitle1">
+                Monitor and manage system nodes, track performance metrics, and ensure optimal operation
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            onClick={fetchNodes}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': {
+                borderColor: 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
           >
-            <ArrowBackIcon />
-          </IconButton>
-          <Typography variant="h4" component="h1">
-            Node Monitoring
-          </Typography>
+            Refresh
+          </Button>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<RefreshIcon />}
-          onClick={fetchNodes}
-        >
-          Refresh
-        </Button>
-      </Box>
+      </Paper>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -569,7 +644,7 @@ const NodeMonitoring = ({ onNavigateBack }) => {
           <Button onClick={() => setNodeDetailOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
-    </DashboardContainer>
+    </Container>
   );
 };
 

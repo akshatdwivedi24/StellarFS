@@ -124,12 +124,52 @@ function SystemOperations({ onNavigateBack }) {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
-        <IconButton onClick={onNavigateBack}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4">System Operations</Typography>
-      </Stack>
+      {/* Header */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 4,
+          bgcolor: 'primary.main',
+          color: 'white',
+          borderRadius: 2,
+        }}
+      >
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <IconButton 
+              onClick={onNavigateBack} 
+              sx={{ mr: 2, color: 'white' }} 
+              aria-label="back"
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <Box>
+              <Typography variant="h4" component="h1" gutterBottom>
+                System Operations & Maintenance
+              </Typography>
+              <Typography variant="subtitle1">
+                Monitor system performance, manage backups, and configure system settings
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            onClick={handleRefresh}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': {
+                borderColor: 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+          >
+            Refresh
+          </Button>
+        </Box>
+      </Paper>
 
       {renderSystemStatus()}
 
