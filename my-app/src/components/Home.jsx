@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -17,7 +17,9 @@ import {
   Backup as BackupIcon,
   CloudUpload as CloudUploadIcon,
   Group as GroupIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
+import AboutUsDialog from './AboutUsDialog';
 
 const features = [
   {
@@ -54,18 +56,20 @@ const features = [
 
 const Home = () => {
   const theme = useTheme();
+  const [aboutUsOpen, setAboutUsOpen] = useState(false);
+
+  const handleOpenAboutUs = () => {
+    setAboutUsOpen(true);
+  };
+
+  const handleCloseAboutUs = () => {
+    setAboutUsOpen(false);
+  };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
       {/* Hero Section */}
-      <Box
-        sx={{
-          bgcolor: 'primary.main',
-          color: 'white',
-          py: { xs: 6, sm: 8, md: 10 },
-          mb: { xs: 4, sm: 6, md: 8 },
-        }}
-      >
+      <Box sx={{ bgcolor: 'primary.main', color: 'white', py: { xs: 8, sm: 12, md: 16 } }}>
         <Container maxWidth="lg">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
@@ -263,6 +267,8 @@ const Home = () => {
           ))}
         </Box>
       </Container>
+
+      <AboutUsDialog open={aboutUsOpen} onClose={handleCloseAboutUs} />
     </Box>
   );
 };

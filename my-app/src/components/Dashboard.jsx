@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Button,
 } from '@mui/material';
 import {
   Storage as StorageIcon,
@@ -36,7 +37,9 @@ import {
   Build as BuildIcon,
   Warning as WarningIcon,
   CheckCircleOutline as CheckCircleOutlineIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
+import AboutUsDialog from './AboutUsDialog';
 
 const features = [
   {
@@ -114,6 +117,15 @@ const features = [
 
 const Dashboard = ({ user, onNavigate }) => {
   const theme = useTheme();
+  const [aboutUsOpen, setAboutUsOpen] = useState(false);
+
+  const handleOpenAboutUs = () => {
+    setAboutUsOpen(true);
+  };
+
+  const handleCloseAboutUs = () => {
+    setAboutUsOpen(false);
+  };
 
   const handleFeatureClick = (view) => {
     if (onNavigate && view) {
@@ -345,6 +357,8 @@ const Dashboard = ({ user, onNavigate }) => {
           ))}
         </Box>
       </Container>
+
+      <AboutUsDialog open={aboutUsOpen} onClose={handleCloseAboutUs} />
     </Box>
   );
 };

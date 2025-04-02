@@ -1,9 +1,68 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Spring Boot
+application-*.properties
+application-*.yml
+!application.properties
+!application.yml
+
 # Resources folder
-resources/
+src/main/resources/
+src/test/resources/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS specific files
+.DS_Store
+Thumbs.db
 
 # Dependencies
-node_modules/
-target/
 .mvn/
 mvnw
 mvnw.cmd
@@ -19,11 +78,9 @@ mvnw.cmd
 build/
 dist/
 out/
-*.class
 *.jar
 
 # Logs
-*.log
 logs/
 
 # Environment files
