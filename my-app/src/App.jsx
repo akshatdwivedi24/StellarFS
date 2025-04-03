@@ -98,7 +98,7 @@ function App() {
         console.error('Backend connection error:', error);
       });
 
-    // Check for token in URL
+    // Check for token in URL first (for new logins)
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
     
@@ -120,6 +120,33 @@ function App() {
       } catch (err) {
         console.error('Error processing token:', err);
         setError('Failed to process authentication token');
+      }
+    } else {
+      // Check for existing token in localStorage
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        try {
+          // Decode the token
+          const payload = JSON.parse(atob(storedToken.split('.')[1]));
+          
+          // Check if token is expired
+          const expirationTime = payload.exp * 1000; // Convert to milliseconds
+          if (Date.now() < expirationTime) {
+            setUser({
+              email: payload.sub,
+              name: payload.name,
+              picture: payload.picture
+            });
+          } else {
+            // Token expired, remove it
+            localStorage.removeItem('token');
+            setError('Your session has expired. Please log in again.');
+          }
+        } catch (err) {
+          console.error('Error processing stored token:', err);
+          localStorage.removeItem('token');
+          setError('Invalid authentication token');
+        }
       }
     }
   }, []);
