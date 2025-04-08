@@ -1,0 +1,74 @@
+# Resources folder
+resources/
+
+# Dependencies
+node_modules/
+target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Build files
+build/
+dist/
+out/
+*.class
+*.jar
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+HELP.md
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Node ###
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+### Application Properties with Sensitive Data ###
+src/main/resources/application-dev.yml
+src/main/resources/application-prod.yml
+src/main/resources/application.properties
+
+### React Build ###
+my-app/build/
+my-app/node_modules/
