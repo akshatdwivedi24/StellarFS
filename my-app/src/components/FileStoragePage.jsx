@@ -40,17 +40,10 @@ const FileStoragePage = ({ onNavigateBack }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulate fetching files
-    setTimeout(() => {
-      setFiles([
-        { id: 1, name: 'Project Documentation.pdf', type: 'pdf', size: 2456789, lastModified: '2023-06-15T10:30:00' },
-        { id: 2, name: 'Product Roadmap.docx', type: 'document', size: 1234567, lastModified: '2023-06-14T15:45:00' },
-        { id: 3, name: 'Team Photo.jpg', type: 'image', size: 3456789, lastModified: '2023-06-13T09:20:00' },
-        { id: 4, name: 'Source Code.zip', type: 'archive', size: 4567890, lastModified: '2023-06-12T14:15:00' },
-        { id: 5, name: 'Database Schema.sql', type: 'code', size: 567890, lastModified: '2023-06-11T11:30:00' },
-      ]);
-      setLoading(false);
-    }, 1000);
+    // Initialize loading state
+    setLoading(true);
+    // TODO: Implement actual file fetching from backend
+    setLoading(false);
   }, []);
 
   const getFileIcon = (type) => {
