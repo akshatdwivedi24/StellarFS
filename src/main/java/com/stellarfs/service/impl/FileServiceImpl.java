@@ -94,38 +94,82 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileDTO uploadFile(MultipartFile file, String path, String owner) {
-        // In a real application, we would save the file to a storage system
-        // For now, we'll just create a file metadata entry
-        
-        if (file == null) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+
+        try {
+            // Generate a unique ID for the file
+            String id = UUID.randomUUID().toString();
+            
+            // Create a new FileDTO
+            FileDTO newFile = new FileDTO(
+                id,
+                file.getOriginalFilename(),
+                getFileType(file.getOriginalFilename()),
+                file.getSize(),
+                LocalDateTime.now(),
+                owner,
+                Arrays.asList("read", "write", "delete"),
+                path,
+                1
+            );
+
+            // Add the file to our list
+            files.add(newFile);
+
+            // Create initial version
+            List<FileVersionDTO> versions = new ArrayList<>();
+            versions.add(new FileVersionDTO(
+                id,
+                1,
+                LocalDateTime.now(),
+                file.getSize(),
+                owner,
+                true
+            ));
+            fileVersions.put(id, versions);
+
+            return newFile;
+        } catch (Exception e) {
             return null;
         }
-        
-        String fileName = file.getOriginalFilename();
-        String fileType = getFileTypeFromName(fileName);
-        Long fileSize = file.getSize();
-        
-        String id = UUID.randomUUID().toString();
-        FileDTO newFile = new FileDTO(
-            id,
-            fileName,
-            fileType,
-            fileSize,
-            LocalDateTime.now(),
-            owner,
-            Arrays.asList("read", "write", "delete"),
-            path,
-            1
-        );
-        
-        files.add(newFile);
-        
-        // Create initial version
-        List<FileVersionDTO> versions = new ArrayList<>();
-        versions.add(new FileVersionDTO(id, 1, LocalDateTime.now(), fileSize, owner, true));
-        fileVersions.put(id, versions);
-        
-        return newFile;
+    }
+
+    private String getFileType(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        switch (extension) {
+            case "pdf":
+                return "pdf";
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "gif":
+                return "image";
+            case "doc":
+            case "docx":
+            case "txt":
+                return "document";
+            case "zip":
+            case "rar":
+            case "7z":
+                return "archive";
+            case "mp4":
+            case "avi":
+            case "mov":
+                return "video";
+            case "mp3":
+            case "wav":
+            case "flac":
+                return "audio";
+            case "java":
+            case "js":
+            case "py":
+            case "cpp":
+                return "code";
+            default:
+                return "unknown";
+        }
     }
 
     @Override
@@ -209,25 +253,5 @@ public class FileServiceImpl implements FileService {
         return files.stream()
                 .filter(file -> file.getType().equals(type))
                 .collect(Collectors.toList());
-    }
-    
-    // Helper method to determine file type from filename
-    private String getFileTypeFromName(String name) {
-        if (name == null || name.isEmpty()) {
-            return "document";
-        }
-        
-        String extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-        
-        if (Arrays.asList("jpg", "jpeg", "png", "gif", "bmp", "svg").contains(extension)) return "image";
-        if (Arrays.asList("pdf").contains(extension)) return "pdf";
-        if (Arrays.asList("doc", "docx", "xls", "xlsx", "ppt", "pptx", "csv").contains(extension)) return "document";
-        if (Arrays.asList("txt", "log", "md").contains(extension)) return "text";
-        if (Arrays.asList("js", "jsx", "ts", "tsx", "html", "css", "java", "py", "c", "cpp", "sql", "json").contains(extension)) return "code";
-        if (Arrays.asList("mp4", "avi", "mov", "wmv", "flv", "mkv").contains(extension)) return "video";
-        if (Arrays.asList("mp3", "wav", "ogg", "flac").contains(extension)) return "audio";
-        if (Arrays.asList("zip", "rar", "7z", "tar", "gz").contains(extension)) return "archive";
-        
-        return "document";
     }
 } 

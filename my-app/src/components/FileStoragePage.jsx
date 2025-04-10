@@ -1,190 +1,149 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
+import { 
+  Box, 
+  Button, 
+  Typography, 
+  Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Paper,
-  IconButton,
-  Grid,
-  Card,
-  CardContent,
-  Button,
-  useTheme,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemSecondaryAction,
+  LinearProgress
 } from '@mui/material';
-import {
-  ArrowBack as ArrowBackIcon,
-  Storage as StorageIcon,
-  CloudUpload as CloudUploadIcon,
-  Download as DownloadIcon,
-  Delete as DeleteIcon,
-  Folder as FolderIcon,
-  InsertDriveFile as FileIcon,
-  Image as ImageIcon,
-  PictureAsPdf as PdfIcon,
-  Description as DocumentIcon,
-  Code as CodeIcon,
-  Archive as ArchiveIcon,
-  MoreVert as MoreVertIcon,
-} from '@mui/icons-material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-const FileStoragePage = ({ onNavigateBack }) => {
-  const theme = useTheme();
+const FileStoragePage = () => {
+  const [message, setMessage] = useState('');
   const [files, setFiles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    // Simulate fetching files
-    setTimeout(() => {
-      setFiles([
-        { id: 1, name: 'Project Documentation.pdf', type: 'pdf', size: 2456789, lastModified: '2023-06-15T10:30:00' },
-        { id: 2, name: 'Product Roadmap.docx', type: 'document', size: 1234567, lastModified: '2023-06-14T15:45:00' },
-        { id: 3, name: 'Team Photo.jpg', type: 'image', size: 3456789, lastModified: '2023-06-13T09:20:00' },
-        { id: 4, name: 'Source Code.zip', type: 'archive', size: 4567890, lastModified: '2023-06-12T14:15:00' },
-        { id: 5, name: 'Database Schema.sql', type: 'code', size: 567890, lastModified: '2023-06-11T11:30:00' },
-      ]);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  const getFileIcon = (type) => {
-    switch (type) {
-      case 'folder':
-        return <FolderIcon sx={{ color: theme.palette.primary.main }} />;
-      case 'image':
-        return <ImageIcon sx={{ color: theme.palette.info.main }} />;
-      case 'pdf':
-        return <PdfIcon sx={{ color: theme.palette.error.main }} />;
-      case 'document':
-        return <DocumentIcon sx={{ color: theme.palette.primary.main }} />;
-      case 'code':
-        return <CodeIcon sx={{ color: theme.palette.secondary.main }} />;
-      case 'archive':
-        return <ArchiveIcon sx={{ color: theme.palette.warning.main }} />;
-      default:
-        return <FileIcon sx={{ color: theme.palette.text.secondary }} />;
+  const fetchFiles = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/files', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch files');
+      }
+      
+      const data = await response.json();
+      setFiles(data);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      setMessage('Error fetching files: ' + error.message);
     }
   };
 
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      const response = await fetch('http://localhost:8080/upload', {
+        method: 'POST',
+        mode: 'cors',
+        body: formData,
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      setMessage('File uploaded successfully');
+      setFiles(prevFiles => [data, ...prevFiles]);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setMessage('Error uploading file: ' + error.message);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
+  useEffect(() => {
+    fetchFiles();
+  }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      {/* Header */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 3,
-          mb: 4,
-          bgcolor: 'primary.main',
-          color: 'white',
-          borderRadius: 2,
-        }}
-      >
-        <Box display="flex" alignItems="center">
-          <IconButton 
-            onClick={onNavigateBack} 
-            sx={{ mr: 2, color: 'white' }} 
-            aria-label="back"
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <Box>
-            <Typography variant="h4" component="h1" gutterBottom>
-              File Storage Service
-            </Typography>
-            <Typography variant="subtitle1">
-              Upload, download, and manage your files securely
-            </Typography>
-          </Box>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        File Storage
+      </Typography>
+
+      <Box sx={{ mb: 3 }}>
+        <Button
+          component="label"
+          variant="contained"
+          startIcon={<CloudUploadIcon />}
+          disabled={isUploading}
+        >
+          Upload File
+          <input
+            type="file"
+            hidden
+            onChange={handleFileUpload}
+          />
+        </Button>
+      </Box>
+
+      {isUploading && (
+        <Box sx={{ width: '100%', mb: 2 }}>
+          <LinearProgress variant="determinate" value={uploadProgress} />
         </Box>
-      </Paper>
+      )}
 
-      {/* File Management Controls */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={6} md={4}>
-            <Button
-              fullWidth
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              sx={{ height: '56px' }}
-            >
-              Upload Files
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<FolderIcon />}
-              sx={{ height: '56px' }}
-            >
-              Create Folder
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<DownloadIcon />}
-              sx={{ height: '56px' }}
-            >
-              Download Selected
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
+      {message && (
+        <Alert severity={message.includes('successfully') ? 'success' : 'error'} sx={{ mb: 3 }}>
+          {message}
+        </Alert>
+      )}
 
-      {/* File List */}
-      <Paper sx={{ borderRadius: 2, overflow: 'hidden' }}>
-        <List>
-          {files.map((file) => (
-            <React.Fragment key={file.id}>
-              <ListItem
-                button
-                sx={{
-                  '&:hover': {
-                    bgcolor: 'action.hover',
-                  },
-                }}
-              >
-                <ListItemIcon>
-                  {getFileIcon(file.type)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={file.name}
-                  secondary={`${formatFileSize(file.size)} • Last modified: ${formatDate(file.lastModified)}`}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="more">
-                    <MoreVertIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      </Paper>
-    </Container>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>File Name</TableCell>
+              <TableCell align="right">Size (KB)</TableCell>
+              <TableCell align="right">Type</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {files.map((file, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <InsertDriveFileIcon sx={{ mr: 1 }} />
+                    {file.name}
+                  </Box>
+                </TableCell>
+                <TableCell align="right">{(file.size / 1024).toFixed(2)}</TableCell>
+                <TableCell align="right">{file.type}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 

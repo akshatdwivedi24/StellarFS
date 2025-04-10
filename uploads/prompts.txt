@@ -1,0 +1,10 @@
+issue/problem we are facing right now:
+
+there is nothing in the node monitoring and performance component on the page.
+
+what we need right now:
+
+I want the performance page in way that it shows all the charts and visualises all the data such as cpu performance, device storage, disk storage, gpu performance, using charts
+
+Make sure all the changes you make does not change the current frontend and backend files and works without interupption. 
+Make it simple and easier using OSHI library and make sure it dosent change the existed code.

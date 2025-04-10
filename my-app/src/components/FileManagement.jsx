@@ -260,7 +260,9 @@ const FileManagement = ({ onNavigateBack }) => {
 
   // Handle file input change
   const handleFileInputChange = (event) => {
-    setSelectedFiles(Array.from(event.target.files));
+    const newFiles = Array.from(event.target.files);
+    setSelectedFiles(newFiles);
+    setOpenUploadDialog(true);
   };
 
   // Handle upload dialog close
@@ -271,38 +273,52 @@ const FileManagement = ({ onNavigateBack }) => {
   };
 
   // Handle file upload
-  const handleUpload = () => {
-    if (selectedFiles.length === 0) return;
-    
+  const handleUpload = async () => {
+    if (!selectedFiles.length) {
+      setError('Please select at least one file to upload');
+      return;
+    }
+
     setUploading(true);
-    
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          setUploading(false);
-          
-          // Add new files to the list
-          const newFiles = selectedFiles.map((file, index) => ({
-            id: `new-${Date.now()}-${index}`,
-            name: file.name,
-            type: getFileTypeFromName(file.name),
-            size: file.size,
-            lastModified: new Date().toISOString(),
-            owner: 'Akshat Dwivedi',
-            permissions: ['read', 'write', 'delete'],
-            path: '/uploads/',
-            version: 1
-          }));
-          
-          setFiles(prevFiles => [...newFiles, ...prevFiles]);
-          handleUploadDialogClose();
-          return 0;
-        }
-        return prevProgress + 10;
+    setUploadProgress(0);
+
+    try {
+      const formData = new FormData();
+      selectedFiles.forEach(file => {
+        formData.append('files', file);
       });
-    }, 300);
+
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      
+      // Update the files list with the newly uploaded files
+      setFiles(prevFiles => [...prevFiles, ...result]);
+      
+      // Reset states
+      setSelectedFiles([]);
+      setOpenUploadDialog(false);
+      setUploadProgress(100);
+      setError(null);
+      
+      // Show success message
+      setError({ type: 'success', message: 'Files uploaded successfully' });
+    } catch (err) {
+      setError({ type: 'error', message: err.message || 'Failed to upload files' });
+    } finally {
+      setUploading(false);
+      setTimeout(() => setError(null), 5000);
+    }
   };
 
   // Get file type from name
@@ -410,7 +426,7 @@ const FileManagement = ({ onNavigateBack }) => {
   if (error) {
     return (
       <Box sx={{ p: 3 }}>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity={error.type === 'success' ? 'success' : 'error'}>{error.message}</Alert>
       </Box>
     );
   }
