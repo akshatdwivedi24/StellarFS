@@ -24,11 +24,11 @@ const FileStoragePage = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await fetch('http://localhost:8080/files', {
+      const response = await fetch('http://localhost:8080/api/files', {
         method: 'GET',
-        mode: 'cors',
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json'
         }
       });
       
@@ -55,12 +55,11 @@ const FileStoragePage = () => {
     setUploadProgress(0);
 
     try {
-      const response = await fetch('http://localhost:8080/upload', {
+      const response = await fetch('http://localhost:8080/api/files/upload', {
         method: 'POST',
-        mode: 'cors',
         body: formData,
         headers: {
-          'Accept': 'application/json',
+          'Accept': 'application/json'
         }
       });
 
